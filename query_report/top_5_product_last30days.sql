@@ -1,0 +1,19 @@
+with cte_1 as (
+  select   max(date(ORDER_PURCHASE_TIMESTAMP)) as daily    
+    FROM SIGMATECH_DEMO.PUBLIC.FACT_SALES 
+) , t as (
+    SELECT
+        p.PRODUCT_CATEGORY_NAME,
+        SUM(f.PRICE + f.FREIGHT_VALUE) AS total_revenue,
+        RANK() OVER (ORDER BY  SUM(f.PRICE + f.FREIGHT_VALUE) DESC) AS rank
+    FROM SIGMATECH_DEMO.PUBLIC.FACT_SALES f
+    JOIN SIGMATECH_DEMO.PUBLIC.DIM_PRODUCTS  p 
+        ON f.PRODUCT_ID = p.PRODUCT_ID
+    JOIN  cte_1  
+    WHERE date(f.ORDER_PURCHASE_TIMESTAMP) >= cte_1.daily - INTERVAL '30 days'
+    AND f.ORDER_STATUS = 'delivered'
+    GROUP BY p.PRODUCT_CATEGORY_NAME 
+) 
+
+SELECT *
+FROM t WHERE rank <= 5; 

@@ -1,0 +1,54 @@
+
+version: 2
+
+models:
+  - name: dim_customers
+    description: "A customers dbt model"
+    columns:
+      - name: CUSTOMER_ID
+        description: "The primary key for this table"
+        data_tests: 
+          - not_null
+
+  - name: dim_products
+    description: "A products dbt model"
+    columns:
+      - name: PRODUCT_ID
+        description: "The primary key for this table"
+        data_tests: 
+          - not_null
+
+
+
+  - name: fact_sales
+    description: "A fact sales dbt model"
+    columns:   
+
+      - name: CUSTOMER_ID
+        description: "The primary key for this table"
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('dim_customers')
+              field: customer_id
+
+
+      - name: PRODUCT_ID
+        description: "The primary key for this table"
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('DIM_PRODUCTS')
+              field: PRODUCT_ID
+
+        
+      
+      - name: ORDER_STATUS
+        description: "Status of the order"
+        data_tests: 
+          - accepted_values:
+              values: ['delivered','invoiced','canceled','created','processing','unavailable','approved','shipped']
+
+
+          
+   
