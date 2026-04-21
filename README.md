@@ -1,4 +1,8 @@
-Welcome to your new dbt project!
+**DETAIL DELIERED :
+
+1. SQL Script => dir query_report
+2. dbt project name => dbt_project_sigmatech
+3.  Screenshot dbt run,  dbt test,  table snowflake => on dir screenshot **
 
 ### Using the starter project
 
